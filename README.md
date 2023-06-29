@@ -12,9 +12,7 @@ Wordle is a word-guessing game where players attempt to guess a hidden word by i
 
 ### General information
 * In first run you must copy the words from the provided words.txt to the appropriate place in settings (log in as admin)
-## Known bugs
-* Could not show the high score table with real information on modal, will show on console
-
+  
 ## Features
 User Login: Players can log in as either a user or an admin.
 Admin Privileges: The admin role allows changing game settings, such as the theme and the number of rows.
