@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wordle</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/js/icon.ico}">
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/js/Design.css}">
+    <script th:src="@{/js/InputHandle.js}"></script>
+</head>
+
+<body th:style="'background-color: ' + (${theme} ? '#CFF5E7' : '#C3ACD0')">
+<div th:insert="~{navbar.html :: nav}" th:with="theme=${theme}"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div class="row" id="inputRows" style="background-color: transparent">
+                <table class="input-table">
+                    <tbody>
+                    <form id="wordForm" th:action="@{/addGuess}" method="post">
+                        <input type="hidden" id="combinedGuess" name="guess" value=""/>
+                        <tr th:each="row, rowStat : ${table}">
+                            <td th:each="cell, cellStat : ${row}">
+                                <label>
+                                    <input type="text" th:value="${cell.letter}" th:disabled="${!cell.active}"
+                                           maxlength="1" class="input-letter guess-input"
+                                           th:id="'input-' + ${rowStat.index} + '-' + ${cellStat.index}"
+                                           th:data-active-row="${rowStat.index} == ${activeGuess}"
+                                           th:style="${cell.getColor()}"
+                                           th:attr="oninput='handleInput(this, ' + ${cellStat.index} + ', ' + ${rowStat.index} + ');', onkeydown='if(event.keyCode === 8) goBack(' + ${rowStat.index} + ', ' + ${cellStat.index} + '); else if(event.keyCode === 13 && ' + ${cellStat.index} + ' === 4) this.form.submit();'"
+                                           required/>
+                                </label>
+                            </td>
+                        </tr>
+                    </form>
+                    </tbody>
+                </table>
+                <div class="row d-flex justify-content-center mt-3">
+                    <div class="col-6">
+                        <div class="row d-flex justify-content-center">
+                            <div class="row d-flex justify-content-center">
+                                <button class="btn btn-outline-secondary btn-sm p-2 keyboard-letter"
+                                        th:each="letter: ${keyboard.keySet()}"
+                                        th:text="${letter}"
+                                        th:style="${keyboard[__${letter}__]}"
+                                        th:attr="onclick='handleButtonClick(\'' + ${letter} + '\');'">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <canvas id="drawing_canvas"></canvas>
+            </div>
+        </div>
+        <div class="col-1"></div>
+    </div>
+</div>
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</body>
+</html>
